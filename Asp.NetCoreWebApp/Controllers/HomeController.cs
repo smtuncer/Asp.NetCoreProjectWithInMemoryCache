@@ -14,25 +14,26 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        if (!_memoryCache.TryGetValue("cachedData", out string cachedData))
+        if (!_memoryCache.TryGetValue("cachedDataKey", out string cachedDataKey))
         {
             // Cache'te veri yoksa, veri kaynaðýndan al
-            cachedData = "Bu cache'de saklanan veri";
+            cachedDataKey = "Bu cache'de saklanan veri";
 
             // Cache ayarlarý
             var cacheEntryOptions = new MemoryCacheEntryOptions
             {
-                // Cache süresini belirleyin (örneðin 60 saniye)
+                // Cache süresini belirleyin (örneðin 5 dakika)
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
                 // Cache'in süre dolmadan önce kaybolmamasý için bir öncelik belirleyin
-                Priority = CacheItemPriority.Normal
+                Priority = CacheItemPriority.Normal,
+
             };
 
             // Veriyi cache'e ekle
-            _memoryCache.Set("cachedData", cachedData, cacheEntryOptions);
+            _memoryCache.Set("cachedData", cachedDataKey, cacheEntryOptions);
         }
 
         // Cache'teki veriyi döndür
-        return Ok(cachedData);
+        return Ok(cachedDataKey);
     }
 }
